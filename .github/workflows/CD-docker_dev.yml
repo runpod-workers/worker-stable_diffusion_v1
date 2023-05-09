@@ -7,6 +7,11 @@ on:
 
 jobs:
   docker:
+    strategy:
+      matrix:
+        model_name: ["stable-diffusion-v1-5"]
+        model_url: ["https://huggingface.co/runwayml/stable-diffusion-v1-5"]
+
     runs-on: ubuntu-latest
     steps:
       - name: Clear Space
@@ -31,5 +36,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
+          build-args: MODEL_URL=${{ matrix.model_url }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:dev
+          tags: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-dev
