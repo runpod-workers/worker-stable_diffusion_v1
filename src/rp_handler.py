@@ -4,8 +4,9 @@ import os
 import predict
 
 import runpod
-from runpod.serverless.utils import rp_download, rp_upload, rp_cleanup
 from runpod.serverless.utils.rp_validator import validate
+from runpod.serverless.utils.rp_upload import upload_file_to_bucket
+from runpod.serverless.utils import rp_download, rp_cleanup
 
 from rp_schema import INPUT_SCHEMA
 
@@ -29,8 +30,10 @@ def run(job):
     validated_input = validated_input['validated_input']
 
     # Download input objects
-    job_input['init_image'], job_input['mask'] = rp_download.download_input_objects(
-        [job_input.get('init_image', None), job_input.get('mask', None)]
+    job_input['init_image'], job_input['mask'] = rp_download.download_files_from_urls(
+        job['id'],
+        [job_input.get('init_image', None), job_input.get(
+            'mask', None)]
     )  # pylint: disable=unbalanced-tuple-unpacking
 
     MODEL.NSFW = job_input.get('nsfw', True)
@@ -57,7 +60,7 @@ def run(job):
 
     job_output = []
     for index, img_path in enumerate(img_paths):
-        image_url = rp_upload.upload_image(job['id'], img_path, index)
+        image_url = upload_file_to_bucket(job['id'], img_path, index)
 
         job_output.append({
             "image": image_url,
