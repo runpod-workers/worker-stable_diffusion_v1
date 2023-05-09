@@ -9,8 +9,13 @@ jobs:
   docker:
     strategy:
       matrix:
-        model_name: ["stable-diffusion-v1-5"]
-        model_url: ["https://huggingface.co/runwayml/stable-diffusion-v1-5"]
+        model_name: ["stable-diffusion-v1-5", "anything-v3", "anything-v4"]
+        model_url:
+          [
+            "https://huggingface.co/runwayml/stable-diffusion-v1-5",
+            "https://huggingface.co/Linaqruf/anything-v3.0",
+            "https://huggingface.co/andite/anything-v4.0",
+          ]
 
     runs-on: ubuntu-latest
     steps:
