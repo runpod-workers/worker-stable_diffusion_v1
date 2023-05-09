@@ -13,4 +13,4 @@ RUN pip install --upgrade pip && \
 # Add src files (Worker Template)
 ADD src .
 
-CMD [ "python", "-u", "/handler.py" ]
+CMD [ "python", "-u", "/rp_handler.py" ]
