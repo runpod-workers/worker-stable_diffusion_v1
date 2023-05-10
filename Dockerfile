@@ -26,4 +26,4 @@ RUN rm /model_fetcher.py
 # Add src files (Worker Template)
 ADD src .
 
-CMD [ "python", "-u", "/rp_handler.py", "--model_tag=${MODEL_TAG}" ]
+CMD python -u /rp_handler.py --model_tag=${MODEL_TAG}
