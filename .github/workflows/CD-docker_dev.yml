@@ -22,6 +22,14 @@ jobs:
             model_tag: andite/anything-v4.0
             model_url: https://huggingface.co/andite/anything-v4.0
 
+          - model_name: openjourney
+            model_tag: prompthero/openjourney
+            model_url: https://huggingface.co/prompthero/openjourney
+
+          - model_name: realistic-vision
+            model_tag: SG161222/Realistic_Vision_V1.4
+            model_url: https://huggingface.co/SG161222/Realistic_Vision_V1.4
+
     runs-on: ubuntu-latest
     steps:
       - name: Clear Space
