@@ -2,6 +2,7 @@
 
 import os
 import predict
+import argparse
 
 import runpod
 from runpod.serverless.utils.rp_validator import validate
@@ -11,7 +12,12 @@ from runpod.serverless.utils import rp_download, rp_cleanup
 from rp_schema import INPUT_SCHEMA
 
 
-MODEL = predict.Predictor()
+# Grab args
+parser = argparse.ArgumentParser()
+parser.add_argument('--model_tag', type=str, default="runwayml/stable-diffusion-v1-5")
+args = parser.parse_args()
+
+MODEL = predict.Predictor(model_tag=args.model_tag)
 MODEL.setup()
 
 

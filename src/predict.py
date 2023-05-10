@@ -40,6 +40,12 @@ MODEL_CACHE = "diffusers-cache"
 class Predictor:
     '''Predictor class for StableDiffusion-v1'''
 
+    def __init__(self, model_tag="runwayml/stable-diffusion-v1-5"):
+        '''
+        Initialize the Predictor class
+        '''
+        self.model_tag = model_tag
+
     def setup(self):
         '''
         Load the model into memory to make running multiple predictions efficient
@@ -47,7 +53,7 @@ class Predictor:
         print("Loading pipeline...")
 
         self.txt2img_pipe = StableDiffusionPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5",
+            self.model_tag,
             safety_checker=None,
             cache_dir=MODEL_CACHE,
             local_files_only=True,

@@ -11,12 +11,15 @@ jobs:
       matrix:
         include:
           - model_name: stable-diffusion-v1-5
+            model_tag: runwayml/stable-diffusion-v1-5
             model_url: https://huggingface.co/runwayml/stable-diffusion-v1-5
 
           - model_name: anything-v3
+            model_tag: Linaqruf/anything-v3.0
             model_url: https://huggingface.co/Linaqruf/anything-v3.0
 
           - model_name: anything-v4
+            model_tag: andite/anything-v4.0
             model_url: https://huggingface.co/andite/anything-v4.0
 
     runs-on: ubuntu-latest
@@ -43,6 +46,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          build-args: MODEL_URL=${{ matrix.model_url }}
+          build-args: MODEL_URL=${{ matrix.model_url }},MODEL_TAG=${{ matrix.model_tag }}
           push: true
           tags: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-dev
