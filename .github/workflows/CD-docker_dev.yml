@@ -54,6 +54,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          build-args: MODEL_URL=${{ matrix.model_url }} MODEL_TAG=${{ matrix.model_tag }}
+          build-args: |
+            MODEL_URL=${{ matrix.model_url }}
+            MODEL_TAG=${{ matrix.model_tag }}
           push: true
           tags: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-dev
