@@ -26,4 +26,6 @@ RUN rm /model_fetcher.py
 # Add src files (Worker Template)
 ADD src .
 
+ENV RUNPOD_DEBUG_LEVEL=INFO
+
 CMD python -u /rp_handler.py --model_tag=${MODEL_TAG}
