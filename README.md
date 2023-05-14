@@ -2,7 +2,7 @@
 
 <h1>Stable Diffusion v1.5 | Worker</h1>
 
-[![Docker Image](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml)
+[![Docker Image](https://github.com/runpod-workers/worker-stable_diffusion_v1/actions/workflows/CD-docker_release.yml/badge.svg)](https://github.com/runpod-workers/worker-stable_diffusion_v1/actions/workflows/CD-docker_release.yml)
 
 </div>
 
