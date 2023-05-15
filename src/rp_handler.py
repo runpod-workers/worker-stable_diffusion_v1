@@ -12,15 +12,6 @@ from runpod.serverless.utils import rp_download, rp_cleanup
 from rp_schema import INPUT_SCHEMA
 
 
-# Grab args
-parser = argparse.ArgumentParser()
-parser.add_argument('--model_tag', type=str, default="runwayml/stable-diffusion-v1-5")
-args = parser.parse_args()
-
-MODEL = predict.Predictor(model_tag=args.model_tag)
-MODEL.setup()
-
-
 def run(job):
     '''
     Run inference on the model.
@@ -79,4 +70,14 @@ def run(job):
     return job_output
 
 
-runpod.serverless.start({"handler": run})
+# Grab args
+parser = argparse.ArgumentParser()
+parser.add_argument('--model_tag', type=str, default="runwayml/stable-diffusion-v1-5")
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+
+    MODEL = predict.Predictor(model_tag=args.model_tag)
+    MODEL.setup()
+
+    runpod.serverless.start({"handler": run})
