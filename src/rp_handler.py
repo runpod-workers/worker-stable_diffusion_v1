@@ -27,32 +27,32 @@ def run(job):
     validated_input = validated_input['validated_input']
 
     # Download input objects
-    job_input['init_image'], job_input['mask'] = rp_download.download_files_from_urls(
+    validated_input['init_image'], validated_input['mask'] = rp_download.download_files_from_urls(
         job['id'],
-        [job_input.get('init_image', None), job_input.get(
+        [validated_input.get('init_image', None), validated_input.get(
             'mask', None)]
     )  # pylint: disable=unbalanced-tuple-unpacking
 
-    MODEL.NSFW = job_input.get('nsfw', True)
+    MODEL.NSFW = validated_input.get('nsfw', True)
 
-    if job_input['seed'] is None:
-        job_input['seed'] = int.from_bytes(os.urandom(2), "big")
+    if validated_input['seed'] is None:
+        validated_input['seed'] = int.from_bytes(os.urandom(2), "big")
 
     img_paths = MODEL.predict(
-        prompt=job_input["prompt"],
-        negative_prompt=job_input.get("negative_prompt", None),
-        width=job_input.get('width', 512),
-        height=job_input.get('height', 512),
-        init_image=job_input['init_image'],
-        mask=job_input['mask'],
-        prompt_strength=job_input['prompt_strength'],
-        num_outputs=job_input.get('num_outputs', 1),
-        num_inference_steps=job_input.get('num_inference_steps', 50),
-        guidance_scale=job_input['guidance_scale'],
-        scheduler=job_input.get('scheduler', "K-LMS"),
-        lora=job_input.get("lora", None),
-        lora_scale=job_input.get("lora_scale", 1),
-        seed=job_input['seed']
+        prompt=validated_input["prompt"],
+        negative_prompt=validated_input.get("negative_prompt", None),
+        width=validated_input.get('width', 512),
+        height=validated_input.get('height', 512),
+        init_image=validated_input['init_image'],
+        mask=validated_input['mask'],
+        prompt_strength=validated_input['prompt_strength'],
+        num_outputs=validated_input.get('num_outputs', 1),
+        num_inference_steps=validated_input.get('num_inference_steps', 50),
+        guidance_scale=validated_input['guidance_scale'],
+        scheduler=validated_input.get('scheduler', "K-LMS"),
+        lora=validated_input.get("lora", None),
+        lora_scale=validated_input.get("lora_scale", 1),
+        seed=validated_input['seed']
     )
 
     job_output = []
@@ -61,7 +61,7 @@ def run(job):
 
         job_output.append({
             "image": image_url,
-            "seed": job_input['seed'] + index
+            "seed": validated_input['seed'] + index
         })
 
     # Remove downloaded input objects
