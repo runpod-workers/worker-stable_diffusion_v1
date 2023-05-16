@@ -22,3 +22,7 @@ The docker image requires two build arguments `MODEL_URL` and `Model_TAG` to bui
 ```bash
 docker build --build-arg MODEL_URL=https://huggingface.co/runwayml/stable-diffusion-v1-5 --build-arg MODEL_TAG=main -t runwayml/stable-diffusion-v1-5 .
 ```
+
+## Continuous Deployment
+
+This worker follows a modified version of the [worker template](https://github.com/runpod-workers/worker-template) where the Docker build workflow contains additional SD models to be built and pushed.
