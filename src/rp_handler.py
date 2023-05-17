@@ -57,7 +57,8 @@ def run(job):
 
     job_output = []
     for index, img_path in enumerate(img_paths):
-        image_url = upload_file_to_bucket(job['id'], img_path, index)
+        file_name = f"{job['id']}_{index}.png"
+        image_url = upload_file_to_bucket(file_name, img_path)
 
         job_output.append({
             "image": image_url,
