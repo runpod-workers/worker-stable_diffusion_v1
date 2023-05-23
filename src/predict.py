@@ -189,5 +189,6 @@ def make_scheduler(name, config):
         # "SCORE-VP": ScoreSdeVpScheduler.from_config(config),
         # "UN-CLIPS": UnCLIPScheduler.from_config(config),
         # "VQD": VQDiffusionScheduler.from_config(config),
-        "K-LMS": LMSDiscreteScheduler.from_config(config)
+        "K-LMS": LMSDiscreteScheduler.from_config(config),
+        "KLMS": LMSDiscreteScheduler.from_config(config)
     }[name]
