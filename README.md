@@ -26,3 +26,7 @@ docker build --build-arg MODEL_URL=https://huggingface.co/runwayml/stable-diffus
 ## Continuous Deployment
 
 This worker follows a modified version of the [worker template](https://github.com/runpod-workers/worker-template) where the Docker build workflow contains additional SD models to be built and pushed.
+
+## 🔗 | Links
+
+🐳 [Docker Container](https://hub.docker.com/r/runpod/ai-api-stable-diffusion-v1)
