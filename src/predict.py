@@ -57,6 +57,7 @@ class Predictor:
             safety_checker=None,
             cache_dir=MODEL_CACHE,
             local_files_only=True,
+            torch_dtype=torch.float16,
         ).to("cuda")
         self.img2img_pipe = StableDiffusionImg2ImgPipeline(
             vae=self.txt2img_pipe.vae,
@@ -81,13 +82,14 @@ class Predictor:
 
         # because lora is loaded for the entire model
         self.lora_loaded = False
-
+        self.txt2img_pipe.unet.to(memory_format=torch.channels_last)
+        self.img2img_pipe.unet.to(memory_format=torch.channels_last)
+        self.inpaint_pipe.unet.to(memory_format=torch.channels_last)
         self.txt2img_pipe.enable_xformers_memory_efficient_attention()
         self.img2img_pipe.enable_xformers_memory_efficient_attention()
         self.inpaint_pipe.enable_xformers_memory_efficient_attention()
 
     @torch.inference_mode()
-    @torch.cuda.amp.autocast()
     def predict(self, prompt, negative_prompt, width, height, init_image, mask, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed, lora, lora_scale):
         '''
         Run a single prediction on the model
