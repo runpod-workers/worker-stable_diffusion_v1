@@ -19,9 +19,9 @@ jobs:
             model_url: https://huggingface.co/Linaqruf/anything-v3.0
 
           - model_name: anything-v4
-            model_tag: andite/anything-v4.0
-            model_url: https://huggingface.co/andite/anything-v4.0
-
+            model_tag: rossiyareich/anything-v4.0-vae
+            model_url: https://huggingface.co/rossiyareich/anything-v4.0-vae
+            
           - model_name: openjourney
             model_tag: prompthero/openjourney
             model_url: https://huggingface.co/prompthero/openjourney
