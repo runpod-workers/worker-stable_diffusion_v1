@@ -1,7 +1,7 @@
 name: Docker Image
 
 on:
-  push:
+  pull_request:
     branches:
       - "main"
 
@@ -43,6 +43,11 @@ jobs:
           rm -rf "/usr/local/share/boost"
           rm -rf "$AGENT_TOOLSDIRECTORY"
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -62,4 +67,4 @@ jobs:
             MODEL_URL=${{ matrix.model_url }}
             MODEL_TAG=${{ matrix.model_tag }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-dev
+          tags: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-${{ steps.extract_branch.outputs.branch }}
