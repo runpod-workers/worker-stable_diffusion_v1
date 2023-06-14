@@ -1,0 +1,70 @@
+name: Docker Image
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  docker:
+    strategy:
+      matrix:
+        include:
+          - model_name: stable-diffusion-v1-5
+            model_tag: runwayml/stable-diffusion-v1-5
+            model_url: https://huggingface.co/runwayml/stable-diffusion-v1-5
+
+          - model_name: anything-v3
+            model_tag: Linaqruf/anything-v3.0
+            model_url: https://huggingface.co/Linaqruf/anything-v3.0
+
+          - model_name: anything-v4
+            model_tag: stablediffusionapi/anything-v45
+            model_url: https://huggingface.co/stablediffusionapi/anything-v45
+
+          - model_name: anything-v5
+            model_tag: stablediffusionapi/anything-v5
+            model_url: https://huggingface.co/stablediffusionapi/anything-v5
+
+          - model_name: openjourney
+            model_tag: prompthero/openjourney
+            model_url: https://huggingface.co/prompthero/openjourney
+
+          - model_name: realistic-vision
+            model_tag: SG161222/Realistic_Vision_V1.4
+            model_url: https://huggingface.co/SG161222/Realistic_Vision_V1.4
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear Space
+        run: |
+          rm -rf /usr/share/dotnet
+          rm -rf /opt/ghc
+          rm -rf "/usr/local/share/boost"
+          rm -rf "$AGENT_TOOLSDIRECTORY"
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          build-args: |
+            MODEL_URL=${{ matrix.model_url }}
+            MODEL_TAG=${{ matrix.model_tag }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-${{ steps.extract_branch.outputs.branch }}
