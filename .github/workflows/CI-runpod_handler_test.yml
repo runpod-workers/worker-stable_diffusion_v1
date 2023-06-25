@@ -32,7 +32,7 @@ jobs:
           method: "POST"
           customHeaders: '{"Content-Type": "application/json"}'
           bearerToken: ${{ secrets.RUNPOD_API_KEY }}
-          data: '{"input":{"github_pat": "${{ secrets.GH_PAT }}", "github_org":"${{ github.GITHUB_REPOSITORY_OWNER }}"}}'
+          data: '{"input":{"github_pat": "${{ secrets.GH_PAT }}", "github_org":"${{ github.repository_owner }}"}}'
 
       - name: Extract Job ID
         id: extract_id
