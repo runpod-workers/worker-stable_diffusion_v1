@@ -67,4 +67,4 @@ jobs:
             MODEL_URL=${{ matrix.model_url }}
             MODEL_TAG=${{ matrix.model_tag }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-${{ steps.extract_branch.outputs.branch }}
+          tags: ${{ vars.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-${{ steps.extract_branch.outputs.branch }}

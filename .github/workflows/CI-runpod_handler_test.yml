@@ -1,0 +1,92 @@
+name: CI | Test Worker
+
+# Requires the following secrets:
+# - RUNPOD_ENDPOINT: The endpoint of the Runpod API
+# - RUNPOD_API_KEY: The API key to authenticate with the Runpod API
+# - GH_PAT: A GitHub Personal Access Token with access to the repository
+# - GH_ORG: The GitHub organization the repository is in
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  initialize_runner:
+    runs-on: ubuntu-latest
+    outputs:
+      id: ${{ steps.extract_id.outputs.runpod_job_id }}
+
+    steps:
+      - name: Deploy Worker
+        id: deploy
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "https://api.runpod.ai/v2/${{ vars.RUNNER_24GB }}/run"
+          method: "POST"
+          customHeaders: '{"Content-Type": "application/json"}'
+          bearerToken: ${{ secrets.RUNPOD_API_KEY }}
+          data: '{"input":{"github_pat": "${{ secrets.GH_PAT }}", "github_org":"${{ github.GITHUB_REPOSITORY_OWNER }}"}}'
+
+      - name: Extract Job ID
+        id: extract_id
+        run: |
+          ID=$(echo '${{ steps.deploy.outputs.response }}' | jq -r '.id')
+          echo "::set-output name=runpod_job_id::$ID"
+
+  run_tests:
+    needs: initialize_runner
+    runs-on: runpod
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.11 & install dependencies
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r builder/requirements.txt
+
+      - name: Execute Tests
+        run: |
+          python src/handler.py --test_input='{"input": "test"}'
+
+  terminate_runner:
+    if: always()
+    needs: [run_tests, initialize_runner]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Job Status
+        id: get_status
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "https://api.runpod.ai/v2/${{ vars.RUNNER_24GB }}/status/${{ needs.initialize_runner.outputs.id }}"
+          method: "GET"
+          customHeaders: '{"Content-Type": "application/json"}'
+          bearerToken: ${{ secrets.RUNPOD_API_KEY }}
+
+      - name: Parse Status
+        id: parse_status
+        run: |
+          STATUS=$(echo '${{ steps.get_status.outputs.response }}' | jq -r '.status')
+          echo "::set-output name=status::$STATUS"
+
+      - name: Shutdown Worker
+        if: ${{ steps.parse_status.outputs.status != 'COMPLETED' }}
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "https://api.runpod.ai/v2/${{ vars.RUNNER_24GB }}/cancel/${{ needs.initialize_runner.outputs.id }}"
+          method: "POST"
+          customHeaders: '{"Content-Type": "application/json"}'
+          bearerToken: ${{ secrets.RUNPOD_API_KEY }}
