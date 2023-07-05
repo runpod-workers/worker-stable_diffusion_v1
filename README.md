@@ -20,7 +20,7 @@ This repository contains the worker for the SDv1 AI Endpoints. The following doc
 The docker image requires two build arguments `MODEL_URL` and `Model_TAG` to build the image. The `MODEL_URL` is the url of the model repository and the `Model_TAG` is the tag of the model repository.
 
 ```bash
-docker build --build-arg MODEL_URL=https://huggingface.co/runwayml/stable-diffusion-v1-5 --build-arg MODEL_TAG=main -t runwayml/stable-diffusion-v1-5 .
+docker build --build-arg MODEL_URL=https://huggingface.co/runwayml/stable-diffusion-v1-5 --build-arg MODEL_TAG=runwayml/stable-diffusion-v1-5 -t runwayml/stable-diffusion-v1-5 .
 ```
 
 ## Continuous Deployment
