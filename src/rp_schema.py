@@ -12,13 +12,13 @@ INPUT_SCHEMA = {
         'type': int,
         'required': False,
         'default': 512,
-        'constraints': lambda width: width in [128, 256, 384, 448, 512, 576, 640, 704, 768]
+        'constraints': lambda width: width in [128, 256, 384, 448, 512, 576, 640, 704, 768, 832, 896, 960, 1024]
     },
     'height': {
         'type': int,
         'required': False,
         'default': 512,
-        'constraints': lambda height: height in [128, 256, 384, 448, 512, 576, 640, 704, 768]
+        'constraints': lambda height: height in [128, 256, 384, 448, 512, 576, 640, 704, 768, 832, 896, 960, 1024]
     },
     'init_image': {
         'type': str,
