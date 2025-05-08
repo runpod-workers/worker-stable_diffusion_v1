@@ -2,7 +2,7 @@
 
 <h1>Stable Diffusion v1.5 | Worker</h1>
 
-[![Docker Image](https://github.com/runpod-workers/worker-stable_diffusion_v1/actions/workflows/CD-docker_release.yml/badge.svg)](https://github.com/runpod-workers/worker-stable_diffusion_v1/actions/workflows/CD-docker_release.yml)
+🚨 deprecated, please use [worker-sdxl](https://github.com/runpod-workers/worker-sdxl) or [worker-comfyui](https://github.com/runpod-workers/worker-comfyui) instead
 
 </div>
 
